@@ -21,6 +21,7 @@ operators = conjunction | negation | conditional | disjunction | biconditional
 
 
 import qm
+## this is an implementation of the Quine McCluskey algorithm in python which is necessary  https://github.com/tpircher/quine-mccluskey
 import inspect
 
 
