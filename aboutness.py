@@ -21,7 +21,6 @@ operators = conjunction | negation | conditional | disjunction | biconditional
 
 
 import qm
-## this is an implementation of the Quine McCluskey algorithm in python which is necessary  https://github.com/tpircher/quine-mccluskey
 import inspect
 
 
@@ -494,12 +493,10 @@ def minusval(sent1, sent2, valuation, mytype = 'S1'):
         tms2 = findqm(negate(sent2))
         for tm1 in tms1:
             for tm2 in tms2:
-                if tm_comp_sent(tm2, sent1):
-                    if evaluate(sent1, valuation):
+                if not tm_comp_sent(tm2, sent1):
+                    target = carrot(tm1,tm2)
+                    if tm_at_world(valuation, target):
                         return True
-                target = carrot(tm1,tm2)
-                if tm_at_world(valuation, target):
-                    return True
     
 
 
@@ -591,7 +588,7 @@ def closer(w1, w2, w3):
     return w1closer and not w2closer
 
 
-def minus(sent1, sent2, mytype = 'D4.2'):
+def minus(sent1, sent2, mytype = 'SD'):
     """gives the qm form of the substraction of sent2 from sent1"""
     worlds = generate()
     if mytype == 'path':
@@ -618,7 +615,7 @@ def minus(sent1, sent2, mytype = 'D4.2'):
         for target in targets:
             for start in s1worlds:
                 if len([alt for alt in s1worlds if closer(alt, start, target)]) == 0:
-                    print('start {} target {}'.format(start, target))
+                    #print('start {} target {}'.format(start, target))
                     
                     onroute = [w for w in inbetween if onpath(start, w, target)]
                     additions = additions + onroute                       
@@ -633,7 +630,7 @@ def minus(sent1, sent2, mytype = 'D4.2'):
     
 
 
-def might(sent1, sent2, mytype = 'D4.2'):
+def might(sent1, sent2, mytype = 'SD'):
     """gives the qm form of the substraction of not sent2 from sent1"""
     sent2 = '-(' + sent2 +')'
     return minus(sent1, sent2, mytype)
@@ -770,6 +767,8 @@ test = might('(A&B)v(C&D)', '-B&-D', 'SD')
 test2 = might('(A&B)v(C&D)', '-B&-D', 'short-path')
 
 test3 = might('(A&B)v(C&D)', '-B&-D', 'D-AGM')
+
+test4 = might('(-A&B)v(-B&C)', 'A&B', 'SD')
 ##
 ##for pair in sample_pairs1:
 ##    results =[]
