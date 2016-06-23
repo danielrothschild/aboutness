@@ -604,6 +604,7 @@ def minus(sent1, sent2, mytype = 'SD'):
         sworlds = [w for w in worlds if w in sworlds or w in additions]
         return valtosent(simplify_assignments(sworlds))
     if mytype == 'short-path':
+        #NB: not actually clear what this concept is!
         #print('hi')
         sworlds = [ w for w in worlds if minusval(sent1,sent2, w, 'D-AGM') ]
         s1worlds = findvaluations(sent1)
@@ -769,6 +770,8 @@ test2 = might('(A&B)v(C&D)', '-B&-D', 'short-path')
 test3 = might('(A&B)v(C&D)', '-B&-D', 'D-AGM')
 
 test4 = might('(-A&B)v(-B&C)', 'A&B', 'SD')
+
+
 ##
 ##for pair in sample_pairs1:
 ##    results =[]
@@ -786,8 +789,48 @@ test4 = might('(-A&B)v(-B&C)', 'A&B', 'SD')
 
 a = ('(A&B)v(A&-D)v(C&D)v(C&-B)')
 
+t = range(27)
+
+t[1] = ['A', '-A']
+t[2] = ['A', 'B']
+t[3] = ['A&B', '-A']
+t[4] = ['A&B', '-(A&B)']
+t[5] = ['A&B', '-(A iff B)']
+t[6] = ['A&B', '-(A v B)']
+t[7] = ['AvB', '-(A v B)']
+t[8] = ['AvB', '-A']
+t[9] = ['AvB', '-A v -C']
+t[10] = ['A iff B', '-( A iff B)']
+t[11] = ['A iff B', '-A']
+t[12] = ['A iff B', '-(A > B)']
+t[13] = ['A&B', '-(A iff B )']
+t[14] = ['A&B', '-B&C']
+t[15] = ['A&B', '-Bv-C']
+t[16] = ['A & (B v C)' , '-A&-B']
+t[17] = ['A & (B v C)' , '-Av-B']
+t[18] = ['A & (B v C)' , '-B&-C']
+t[19] = ['(A&B)vC', '-A&-B']
+t[20] = ['(A&B)vC', '-A&-C']
+t[21] = ['(A&B)vC', '-B&-C']
+t[22] = ['(A&B)&C' , '-A&-B']
+t[23] = ['(A&B)&C' , '(-B v (-A&-C))']
+t[24]= ['(A&B)&C' , '(-Av-B v (-A&-C))']
+t[25] = ['(A&B)v(C&D)', '-Av-B', 'SD']
+t[26] = ['(A&B)v(C&D)', '-A&-C', 'SD']
+
+def y_friend(formula):
+    """Convert to a more steve friendly format by replacing 'A's and 'B's with 'p's and 'qs'"""
+    ns = formula.replace('A', 'p')
+    n2 = ns.replace('B', 'q')
+    n3 = n2.replace('C', 'r')
+    return n3.replace('D', 's')
+
+for i in range(27):
+    if i > 0:
+        print('Row {}: {} <>{}  is {}'.format(i, y_friend(t[i][0]), y_friend(t[i][1]), y_friend(might(t[i][0],t[i][1]))))
 
 
-                    
+
+
 
 
